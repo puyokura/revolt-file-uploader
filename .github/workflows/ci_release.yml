@@ -43,11 +43,43 @@ jobs:
           ls -lh *.zip
           cd ..
 
-      - name: Upload Artifacts
+      - name: Upload Linux AMD64 Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: binaries
-          path: dist/*.zip
+          name: rev-up-linux-amd64
+          path: dist/rev-up-linux-amd64.zip
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload Linux ARM64 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rev-up-linux-arm64
+          path: dist/rev-up-linux-arm64.zip
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload Windows AMD64 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rev-up-windows-amd64
+          path: dist/rev-up-windows-amd64.zip
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload macOS AMD64 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rev-up-darwin-amd64
+          path: dist/rev-up-darwin-amd64.zip
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload macOS ARM64 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rev-up-darwin-arm64
+          path: dist/rev-up-darwin-arm64.zip
           if-no-files-found: error
           retention-days: 90
 
