@@ -32,18 +32,22 @@ jobs:
           GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o dist/rev-up-darwin-arm64 cmd/rev-up/main.go
           ls -lh dist/
 
-      - name: Create Artifact Archive
+      - name: Create Artifact Archives
         run: |
           cd dist
-          zip -r ../artifact.zip .
+          zip rev-up-linux-amd64.zip rev-up-linux-amd64
+          zip rev-up-linux-arm64.zip rev-up-linux-arm64
+          zip rev-up-windows-amd64.zip rev-up-windows-amd64.exe
+          zip rev-up-darwin-amd64.zip rev-up-darwin-amd64
+          zip rev-up-darwin-arm64.zip rev-up-darwin-arm64
+          ls -lh *.zip
           cd ..
-          ls -lh artifact.zip
 
-      - name: Upload Artifact
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifact
-          path: artifact.zip
+          name: binaries
+          path: dist/*.zip
           if-no-files-found: error
           retention-days: 90
 
@@ -52,12 +56,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifact.zip
-            dist/rev-up-linux-amd64
-            dist/rev-up-linux-arm64
-            dist/rev-up-windows-amd64.exe
-            dist/rev-up-darwin-amd64
-            dist/rev-up-darwin-arm64
+            dist/*.zip
           draft: false
           prerelease: false
           generate_release_notes: true
