@@ -1,15 +1,17 @@
-name: Release
+name: CI and Release
 
 on:
   push:
+    branches:
+      - main
     tags:
-      - "v*"
+      - 'v*'
 
 permissions:
   contents: write
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,9 +20,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: "1.21"
+          go-version: '1.21'
 
-      - name: Build Binaries
+      - name: Build Project
         run: |
           mkdir -p dist
           GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o dist/rev-up-linux-amd64 cmd/rev-up/main.go
@@ -30,19 +32,27 @@ jobs:
           GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o dist/rev-up-darwin-arm64 cmd/rev-up/main.go
           ls -lh dist/
 
-      - name: Upload Artifacts
+      - name: Create Artifact Archive
+        run: |
+          cd dist
+          zip -r ../artifact.zip .
+          cd ..
+          ls -lh artifact.zip
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build
-          path: ./dist/**
+          name: artifact
+          path: artifact.zip
           if-no-files-found: error
           retention-days: 90
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
         with:
           files: |
+            artifact.zip
             dist/rev-up-linux-amd64
             dist/rev-up-linux-arm64
             dist/rev-up-windows-amd64.exe
@@ -51,5 +61,3 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
-
-
