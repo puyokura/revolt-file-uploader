@@ -30,8 +30,17 @@ jobs:
           GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o dist/rev-up-darwin-arm64 cmd/rev-up/main.go
           ls -lh dist/
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: ./dist/**
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             dist/rev-up-linux-amd64
@@ -42,4 +51,5 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+
 
