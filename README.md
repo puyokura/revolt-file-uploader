@@ -12,6 +12,18 @@ Revolt のファイルサイズ制限（20MB）を超える大きなファイル
 
 ## インストール
 
+### 最新ビルド（nightly.link）
+
+mainブランチの最新ビルドを以下からダウンロードできます:
+
+- **Linux (AMD64)**: [rev-up-linux-amd64.zip](https://nightly.link/puyokura/revolt-file-uploader/workflows/ci_release/main/rev-up-linux-amd64.zip)
+- **Linux (ARM64)**: [rev-up-linux-arm64.zip](https://nightly.link/puyokura/revolt-file-uploader/workflows/ci_release/main/rev-up-linux-arm64.zip)
+- **Windows (AMD64)**: [rev-up-windows-amd64.zip](https://nightly.link/puyokura/revolt-file-uploader/workflows/ci_release/main/rev-up-windows-amd64.zip)
+- **macOS (Intel)**: [rev-up-darwin-amd64.zip](https://nightly.link/puyokura/revolt-file-uploader/workflows/ci_release/main/rev-up-darwin-amd64.zip)
+- **macOS (Apple Silicon)**: [rev-up-darwin-arm64.zip](https://nightly.link/puyokura/revolt-file-uploader/workflows/ci_release/main/rev-up-darwin-arm64.zip)
+
+### Go Install
+
 ```bash
 go install github.com/puyokura/revolt-file-uploader@latest
 ```
