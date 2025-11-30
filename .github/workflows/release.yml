@@ -22,15 +22,24 @@ jobs:
 
       - name: Build Binaries
         run: |
-          mkdir dist
-          GOOS=linux GOARCH=amd64 go build -o dist/rev-up-linux-amd64 cmd/rev-up/main.go
-          GOOS=linux GOARCH=arm64 go build -o dist/rev-up-linux-arm64 cmd/rev-up/main.go
-          GOOS=windows GOARCH=amd64 go build -o dist/rev-up-windows-amd64.exe cmd/rev-up/main.go
-          GOOS=darwin GOARCH=amd64 go build -o dist/rev-up-darwin-amd64 cmd/rev-up/main.go
-          GOOS=darwin GOARCH=arm64 go build -o dist/rev-up-darwin-arm64 cmd/rev-up/main.go
+          mkdir -p dist
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o dist/rev-up-linux-amd64 cmd/rev-up/main.go
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o dist/rev-up-linux-arm64 cmd/rev-up/main.go
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o dist/rev-up-windows-amd64.exe cmd/rev-up/main.go
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o dist/rev-up-darwin-amd64 cmd/rev-up/main.go
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o dist/rev-up-darwin-arm64 cmd/rev-up/main.go
+          ls -lh dist/
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: |
+            dist/rev-up-linux-amd64
+            dist/rev-up-linux-arm64
+            dist/rev-up-windows-amd64.exe
+            dist/rev-up-darwin-amd64
+            dist/rev-up-darwin-arm64
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+
